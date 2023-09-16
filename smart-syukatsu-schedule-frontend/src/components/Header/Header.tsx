@@ -1,6 +1,7 @@
 import React from 'react';
-import { IonHeader, IonTitle, IonToolbar, IonBackButton, IonButtons, IonIcon } from '@ionic/react';
-import text from './../../assets/text.json'
+import { IonHeader, IonTitle, IonToolbar, IonBackButton, IonButtons, IonButton } from '@ionic/react';
+import text from './../../assets/text.json';
+import { MenuOutline } from 'react-ionicons'
 
 type Props = {
     headerText: string
@@ -18,6 +19,16 @@ const Header = ({ headerText, isShowBackButton = false, backButtonText = text.to
                         <IonBackButton text={backButtonText} defaultHref={backButtonHref}></IonBackButton>
                     </IonButtons>}
                     <IonTitle>{headerText}</IonTitle>
+
+                    <IonButtons slot="end">
+                        <IonButton>
+                            <MenuOutline
+                                color={'#00000'}
+                                height="20px"
+                                width="20px"
+                            />
+                        </IonButton>
+                    </IonButtons>
                 </IonToolbar>
             </IonHeader>
         </>
