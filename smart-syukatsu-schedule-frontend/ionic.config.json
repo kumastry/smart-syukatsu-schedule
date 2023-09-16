@@ -1,0 +1,7 @@
+{
+  "name": "smart-syukatsu-schedule-frontend",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
+}
