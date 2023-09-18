@@ -3,6 +3,7 @@ import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import Home from './pages/Home';
 import ViewMessage from './pages/ViewMessage';
+import CorpSchedule from './pages/CorpSchedule';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -37,6 +38,9 @@ const App: React.FC = () => (
         </Route>
         <Route path="/message/:id">
            <ViewMessage />
+        </Route>
+        <Route path="/corp/:id">
+          <CorpSchedule />
         </Route>
       </IonRouterOutlet>
     </IonReactRouter>
