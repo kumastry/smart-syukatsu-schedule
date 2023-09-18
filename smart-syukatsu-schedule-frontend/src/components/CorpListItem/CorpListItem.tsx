@@ -3,22 +3,21 @@ import {
     IonItem,
     IonLabel,
     IonBadge,
-    IonIcon
 } from '@ionic/react';
-import { chevronForward } from 'ionicons/icons';
 
 
 type Props = {
+    id:string
     corpName: string
     corpEvent: string // 一旦string型
     corpPeriod: string // 一旦string型
     corpNote: string
 }
 
-const CorpListItem = ({ corpName, corpEvent, corpPeriod, corpNote }: Props) => {
+const CorpListItem = ({ id, corpName, corpEvent, corpPeriod, corpNote }: Props) => {
     return (
         <>
-            <IonItem>
+            <IonItem  routerLink={`/corp/${id}`} detail = {true}>
                 <IonLabel className="CorpItem">
                     <h2 className="CorpItem__name">
                         {corpName}
@@ -31,7 +30,6 @@ const CorpListItem = ({ corpName, corpEvent, corpPeriod, corpNote }: Props) => {
                         {corpNote}
                     </h3>
                 </IonLabel>
-                <IonIcon aria-hidden="true" icon={chevronForward} />
             </IonItem>
         </>
     );
