@@ -19,16 +19,14 @@ const CorpListItem = ({corpName, corpEvent, corpPeriod, corpNote} : Props) => {
             <IonItem>
                 <IonLabel className="CorpItem">
                     <h2 className="CorpItem__name">
-                        株式会社サンプル１
+                        {corpName}
                     </h2>
-                    <IonBadge className="CorpItem__event" color="success">面談</IonBadge>
+                    <IonBadge className="CorpItem__event" color="success">{corpEvent}</IonBadge>
                     <h3 className="CorpItem__time">
-                        期日：2023年9月21日
+                        期日：{corpPeriod}
                     </h3>
                     <h3 className="CorpItem__note">
-                        ・○○さんとの定期面談 <br></br>
-                        ・質問事項を考える  <br></br>
-                        ・普段着で着ていく  <br></br>
+                        {corpNote}
                     </h3>
                 </IonLabel>
 
