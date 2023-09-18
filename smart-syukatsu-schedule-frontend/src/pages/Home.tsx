@@ -16,12 +16,12 @@ import { sampleHomePageData } from './../data/sampleData';
 const Home: React.FC = () => {
   return (
     <IonPage id="home-page">
-      <Header headerText={text.appTitle} />
+      <Header headerText={text.appTitle} isShowSearchBar={true} />
       <IonContent fullscreen>
         <IonList>
           {
             sampleHomePageData.map((item) => {
-              return <CorpListItem corpName={item.corpName} corpEvent={item.corpEvent} corpPeriod={item.corpPeriod} corpNote={item.corpNote} />;
+              return <CorpListItem id = {item.id} corpName={item.corpName} corpEvent={item.corpEvent} corpPeriod={item.corpPeriod} corpNote={item.corpNote} />;
             })
           }
         </IonList>
