@@ -1,17 +1,14 @@
 import {
-    IonFabButton
+    IonFabButton,
+    IonIcon,
 } from '@ionic/react';
-import { Add } from 'react-ionicons';
+import { add } from 'ionicons/icons';
 
 const FabButton = () => {
     return (
         <>
             <IonFabButton className='AddBotton' style={{ margin: 'auto' }}>
-                <Add
-                    color={'#00000'}
-                    height="40px"
-                    width="40px"
-                />
+                <IonIcon aria-hidden="true" icon={add} />
             </IonFabButton>
         </>
     );

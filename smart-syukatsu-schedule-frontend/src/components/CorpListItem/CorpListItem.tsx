@@ -2,18 +2,20 @@ import React from 'react';
 import {
     IonItem,
     IonLabel,
-    IonBadge
+    IonBadge,
+    IonIcon
 } from '@ionic/react';
-import { ChevronForwardOutline } from 'react-ionicons'
+import { chevronForward } from 'ionicons/icons';
+
 
 type Props = {
-    corpName :string
+    corpName: string
     corpEvent: string // 一旦string型
     corpPeriod: string // 一旦string型
     corpNote: string
 }
 
-const CorpListItem = ({corpName, corpEvent, corpPeriod, corpNote} : Props) => {
+const CorpListItem = ({ corpName, corpEvent, corpPeriod, corpNote }: Props) => {
     return (
         <>
             <IonItem>
@@ -29,12 +31,7 @@ const CorpListItem = ({corpName, corpEvent, corpPeriod, corpNote} : Props) => {
                         {corpNote}
                     </h3>
                 </IonLabel>
-
-                <ChevronForwardOutline
-                    color={'#D9D9D9'}
-                    height="20px"
-                    width="20px"
-                />
+                <IonIcon aria-hidden="true" icon={chevronForward} />
             </IonItem>
         </>
     );

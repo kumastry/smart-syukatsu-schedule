@@ -1,7 +1,8 @@
 import React from 'react';
-import { IonHeader, IonTitle, IonToolbar, IonBackButton, IonButtons, IonButton, IonSearchbar } from '@ionic/react';
+import { IonHeader, IonTitle, IonToolbar, IonBackButton, IonButtons, IonButton, IonSearchbar, IonIcon } from '@ionic/react';
 import text from './../../assets/text.json';
-import { MenuOutline } from 'react-ionicons'
+import { menu } from 'ionicons/icons';
+
 
 type Props = {
     headerText: string
@@ -22,11 +23,7 @@ const Header = ({ headerText, isShowBackButton = false, backButtonText = text.to
 
                     <IonButtons slot="end">
                         <IonButton>
-                            <MenuOutline
-                                color={'#00000'}
-                                height="20px"
-                                width="20px"
-                            />
+                            <IonIcon aria-hidden="true" icon={menu} />
                         </IonButton>
                     </IonButtons>
                 </IonToolbar>
