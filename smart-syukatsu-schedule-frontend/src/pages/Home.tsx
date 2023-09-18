@@ -1,58 +1,37 @@
-import MessageListItem from '../components/MessageListItem';
 import { useState } from 'react';
-import { Message, getMessages } from '../data/messages';
 import {
   IonContent,
-  IonHeader,
   IonList,
   IonPage,
-  IonRefresher,
-  IonRefresherContent,
-  IonTitle,
-  IonToolbar,
-  useIonViewWillEnter
+  IonFooter, IonToolbar
 } from '@ionic/react';
 import './Home.css';
 
+import Header from '../components/Header/Header';
+import CorpListItem from '../components/CorpListItem/CorpListItem';
+import FabButton from '../components/FabButton/FabButton';
+import text from './../assets/text.json';
+import { sampleHomePageData } from './../data/sampleData';
+
 const Home: React.FC = () => {
-
-  const [messages, setMessages] = useState<Message[]>([]);
-
-  useIonViewWillEnter(() => {
-    const msgs = getMessages();
-    setMessages(msgs);
-  });
-
-  const refresh = (e: CustomEvent) => {
-    setTimeout(() => {
-      e.detail.complete();
-    }, 3000);
-  };
-
   return (
     <IonPage id="home-page">
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Inbox</IonTitle>
-        </IonToolbar>
-      </IonHeader>
+      <Header headerText={text.appTitle} />
       <IonContent fullscreen>
-        <IonRefresher slot="fixed" onIonRefresh={refresh}>
-          <IonRefresherContent></IonRefresherContent>
-        </IonRefresher>
-
-        <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">
-              Inbox
-            </IonTitle>
-          </IonToolbar>
-        </IonHeader>
-
         <IonList>
-          {messages.map(m => <MessageListItem key={m.id} message={m} />)}
+          {
+            sampleHomePageData.map((item) => {
+              return <CorpListItem corpName={item.corpName} corpEvent={item.corpEvent} corpPeriod={item.corpPeriod} corpNote={item.corpNote} />;
+            })
+          }
         </IonList>
       </IonContent>
+
+      <IonFooter>
+        <IonToolbar>
+          <FabButton />
+        </IonToolbar>
+      </IonFooter>
     </IonPage>
   );
 };
