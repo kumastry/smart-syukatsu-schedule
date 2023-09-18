@@ -1,5 +1,5 @@
 import React from 'react';
-import { IonHeader, IonTitle, IonToolbar, IonBackButton, IonButtons, IonButton } from '@ionic/react';
+import { IonHeader, IonTitle, IonToolbar, IonBackButton, IonButtons, IonButton, IonSearchbar } from '@ionic/react';
 import text from './../../assets/text.json';
 import { MenuOutline } from 'react-ionicons'
 
@@ -29,6 +29,10 @@ const Header = ({ headerText, isShowBackButton = false, backButtonText = text.to
                             />
                         </IonButton>
                     </IonButtons>
+                </IonToolbar>
+
+                <IonToolbar>
+                    <IonSearchbar placeholder={text.searchByCorp}></IonSearchbar>
                 </IonToolbar>
             </IonHeader>
         </>
