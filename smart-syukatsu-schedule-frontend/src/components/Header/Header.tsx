@@ -9,16 +9,19 @@ type Props = {
     isShowBackButton?: boolean
     backButtonText?: string
     backButtonHref?: string
+    isShowSearchBar?: boolean
 }
 
-const Header = ({ headerText, isShowBackButton = false, backButtonText = text.top, backButtonHref = "/home" }: Props) => {
+const Header = ({ headerText, isShowBackButton = false, backButtonText = text.top, backButtonHref = "/home", isShowSearchBar = false }: Props) => {
     return (
         <>
             <IonHeader>
                 <IonToolbar>
-                    {isShowBackButton && <IonButtons slot="start">
-                        <IonBackButton text={backButtonText} defaultHref={backButtonHref}></IonBackButton>
-                    </IonButtons>}
+                    {isShowBackButton &&
+                        <IonButtons slot="start">
+                            <IonBackButton text={backButtonText} defaultHref={backButtonHref}></IonBackButton>
+                        </IonButtons>
+                    }
                     <IonTitle>{headerText}</IonTitle>
 
                     <IonButtons slot="end">
@@ -27,10 +30,11 @@ const Header = ({ headerText, isShowBackButton = false, backButtonText = text.to
                         </IonButton>
                     </IonButtons>
                 </IonToolbar>
-
-                <IonToolbar>
-                    <IonSearchbar placeholder={text.searchByCorp}></IonSearchbar>
-                </IonToolbar>
+                {isShowSearchBar &&
+                    <IonToolbar>
+                        <IonSearchbar placeholder={text.searchByCorp}></IonSearchbar>
+                    </IonToolbar>
+                }
             </IonHeader>
         </>
     );
