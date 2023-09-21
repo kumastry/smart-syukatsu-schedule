@@ -1,13 +1,13 @@
 {
-    "appTitle":"スマート就活管理",
-    "top":"トップ",
-    "interview": "面接",
-    "casualInterview":"面談",
-    "codingTest":"コーディングテスト",
-    "InformationSession":"説明会",
-    "ES":"ES",
-    "aptitudeTest":"適性試験",
-    "DocumentScreening":"書類選考",
-    "searchByCorp":"企業で検索",
-    "schedule":"スケジュール"
+  "appTitle": "スマート就活管理",
+  "top": "トップ",
+  "interview": "面接",
+  "casualInterview": "面談",
+  "codingTest": "コーディングテスト",
+  "InformationSession": "説明会",
+  "ES": "ES",
+  "aptitudeTest": "適性試験",
+  "DocumentScreening": "書類選考",
+  "searchByCorp": "企業で検索",
+  "schedule": "スケジュール"
 }
