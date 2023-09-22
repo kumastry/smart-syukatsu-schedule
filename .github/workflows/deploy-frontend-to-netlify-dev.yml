@@ -2,6 +2,10 @@ name: Build and Deploy to Netlify in dev
 on:
   push:
     branches: develop
+    paths:
+      - './smart-syukatsu-schedule-frontend/**'
+      - '!README.md'
+
 permissions:
   contents: write
   pull-requests: write
@@ -18,7 +22,6 @@ jobs:
         - uses: actions/setup-node@v3
           with:
             node-version: 18.16.1
-            cache: npm
 
         - name: frontend:install package
           run: |
@@ -29,6 +32,7 @@ jobs:
             npm run test.unit
 
     build-and-deploy:
+        needs: lint-and-test
         runs-on: ubuntu-latest
         timeout-minutes: 10
 
@@ -38,8 +42,6 @@ jobs:
         - uses: actions/setup-node@v3
           with:
             node-version: 18.16.1
-            cache: npm
-
         - name: frontend:install package
           run: |
             npm ci
