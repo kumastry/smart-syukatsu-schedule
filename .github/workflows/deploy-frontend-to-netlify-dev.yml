@@ -4,7 +4,6 @@ on:
     branches: develop
     paths:
       - './smart-syukatsu-schedule-frontend/**'
-      - '!README.md'
 
 permissions:
   contents: write
