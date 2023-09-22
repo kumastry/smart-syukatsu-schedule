@@ -3,6 +3,10 @@ on:
   push:
     branches: develop
 
+defaults:
+  run:
+    working-directory: smart-syukatsu-schedule-frontend
+
 permissions:
   contents: write
   pull-requests: write
