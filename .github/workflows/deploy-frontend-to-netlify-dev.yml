@@ -2,6 +2,8 @@ name: Build and Deploy to Netlify in dev
 on:
   push:
     branches: develop
+    paths:
+      - 'smart-syukatsu-schedule-frontend/**'
 
 defaults:
   run:
