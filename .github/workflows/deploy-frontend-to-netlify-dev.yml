@@ -1,0 +1,72 @@
+name: Build and Deploy to Netlify in dev
+on:
+  push:
+    branches: develop
+    paths:
+      - './smart-syukatsu-schedule-frontend/**'
+      - '!README.md'
+
+permissions:
+  contents: write
+  pull-requests: write
+  statuses: write
+  deployments: write
+
+jobs:
+    lint-and-test:
+      runs-on: ubuntu-latest
+
+      steps:
+        - uses: actions/checkout@v3
+
+        - uses: actions/setup-node@v3
+          with:
+            node-version: 18.16.1
+            cache: npm
+
+        - name: frontend:install package
+          run: |
+            npm ci
+
+        - name: frontend:test
+          run: |
+            npm run test.unit
+
+    build-and-deploy:
+        runs-on: ubuntu-latest
+        timeout-minutes: 10
+
+        steps:
+        - uses: actions/checkout@v3
+
+        - uses: actions/setup-node@v3
+          with:
+            node-version: 18.16.1
+            cache: npm
+
+        - name: frontend:install package
+          run: |
+            npm ci
+
+        - name: frontend:build
+          run: |
+            npm run build
+
+        - name: Deploy to Netlify in dev
+          uses: nwtgck/actions-netlify@v2.0.0
+          with:
+            publish-dir: './smart-syukatsu-schedule-frontend/dist'
+            production-branch: develop
+
+            github-deployment-environment: develop
+
+            github-token: ${{ secrets.GITHUB_TOKEN }}
+            deploy-message: "Deploy frontend from GitHub Actions to Netlify in dev"
+
+          env:
+            NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+            NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID_DEV }}
+
+
+
+
