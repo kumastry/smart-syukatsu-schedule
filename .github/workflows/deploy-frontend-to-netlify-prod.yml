@@ -1,6 +1,6 @@
 name: Build and Deploy to Netlify in prod
 on:
-  push:
+  pull_request:
     branches: main
     paths:
       - 'smart-syukatsu-schedule-frontend/**'
