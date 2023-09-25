@@ -3,8 +3,11 @@ on:
   push:
     branches: develop
     paths:
-      - './smart-syukatsu-schedule-frontend/**'
-      - '!README.md'
+      - 'smart-syukatsu-schedule-frontend/**'
+
+defaults:
+  run:
+    working-directory: smart-syukatsu-schedule-frontend
 
 permissions:
   contents: write
@@ -22,7 +25,8 @@ jobs:
         - uses: actions/setup-node@v3
           with:
             node-version: 18.16.1
-            cache: npm
+            cache: 'npm'
+            cache-dependency-path:  'smart-syukatsu-schedule-frontend/package-lock.json'
 
         - name: frontend:install package
           run: |
@@ -33,6 +37,7 @@ jobs:
             npm run test.unit
 
     build-and-deploy:
+        needs: lint-and-test
         runs-on: ubuntu-latest
         timeout-minutes: 10
 
@@ -42,7 +47,8 @@ jobs:
         - uses: actions/setup-node@v3
           with:
             node-version: 18.16.1
-            cache: npm
+            cache: 'npm'
+            cache-dependency-path:  'smart-syukatsu-schedule-frontend/package-lock.json'
 
         - name: frontend:install package
           run: |
