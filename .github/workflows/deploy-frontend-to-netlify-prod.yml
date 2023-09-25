@@ -4,6 +4,10 @@ on:
     branches: main
     paths:
       - 'smart-syukatsu-schedule-frontend/**'
+  push:
+    branches: main
+    paths:
+      - 'smart-syukatsu-schedule-frontend/**'
 
 defaults:
   run:
