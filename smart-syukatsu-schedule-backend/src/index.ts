@@ -1,7 +1,7 @@
-import express, { Request, Response }  from "express";
+import express, { Request, Response } from "express";
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
-import { corporations, schedules } from '../db/schema';
+import { corporations, schedules } from "../db/schema";
 import { eq } from "drizzle-orm";
 import { oneOf, query } from "express-validator";
 
@@ -20,50 +20,91 @@ type CoporationsQueryT = {
   limit: number;
   offset: number;
   userId: string;
-}
+};
 
-app.get("/corporations", query("userId").isUUID(), async (req:Request<{}, {}, {}, CoporationsQueryT>, res:Response) => {
-  if (!req.query) {
-    const allCorps = await db.select().from(corporations);
-    return res.json(allCorps);
-  }
+app.get(
+  "/corporations",
+  query("userId").isUUID(),
+  async (req: Request<{}, {}, {}, CoporationsQueryT>, res: Response) => {
+    if (!req.query) {
+      const allCorps = await db.select().from(corporations);
+      return res.json(allCorps);
+    }
 
-  const userId = req.query.userId;
-  const limit = req.query.limit || 10;
-  const offset = req.query.offset || 0;
+    const userId = req.query.userId;
+    const limit = req.query.limit || 10;
+    const offset = req.query.offset || 0;
 
+    const latestScheduleSubQuery = db
+      .select()
+      .from(schedules)
+      .orderBy(schedules.startTime)
+      .limit(1)
+      .as("schedules");
+    const corps = await db
+      .select()
+      .from(corporations)
+      .leftJoin(
+        latestScheduleSubQuery,
+        eq(corporations.id, latestScheduleSubQuery.corporationId),
+      )
+      .where(eq(corporations.userId, userId))
+      .limit(limit)
+      .offset(limit * offset);
+    return res.status(200).json(corps);
+  },
+);
+
+// 企業を追加する
+type CoporationsBodyT = {
+  name: string;
+  userId: string;
+};
+
+app.post(
+  "/corporations",
+  async (req: Request<{}, {}, CoporationsBodyT>, res: Response) => {
+    const name = req.body.name;
+    const userId = req.body.userId;
+    const insertedRecord = await db
+      .insert(corporations)
+      .values({ name: name, userId: userId });
+    return res.status(200).json(insertedRecord);
+  },
+);
+
+app.get("/corporations/:corporationId", async (req: Request, res: Response) => {
+  const corporationId = Number(req.params.corporationId);
   const latestScheduleSubQuery = db
     .select()
     .from(schedules)
     .orderBy(schedules.startTime)
     .limit(1)
     .as("schedules");
-  const corps = await db
+
+  const corp = await db
     .select()
     .from(corporations)
     .leftJoin(
       latestScheduleSubQuery,
       eq(corporations.id, latestScheduleSubQuery.corporationId),
     )
-    .where(eq(corporations.userId, userId))
-    .limit(limit)
-    .offset(limit * offset);
-  return res.status(200).json(corps);
+    .where(eq(corporations.id, corporationId));
+
+  if (!corp.length) {
+    return res.status(404).send("404 not found");
+  }
+  return res.json(corp);
 });
 
-// 企業を追加する
-type CoporationsBodyT = {
-  name:string;
-  userId:string;
-}
+app.patch("/corporations/:corporationId", async (req:Request, res:Response) => {
+  // do after
+});
 
-app.post("/corporations", async (req:Request<{}, {}, CoporationsBodyT>, res:Response) => {
-  const name = req.body.name;
-  const userId = req.body.userId;
-  const insertedRecord = await db
-    .insert(corporations)
-    .values({ name: name, userId: userId });
-  return res.status(200).json(insertedRecord);
+app.delete("/corporations/:corporationId", async (req:Request, res:Response) => {
+  const corporationId = Number(req.params.corporationId);
+  const deletedCorp = await db.delete(corporations).where(eq(corporations.id, corporationId)).returning();
+  return res.status(200).json(deletedCorp);
 });
 
 app.get("/corporations/:corporationId/schedules", async (req, res) => {
@@ -96,7 +137,6 @@ type PostScheduleBody = {
 };
 
 app.post("/corporations/:corporationId/schedules", async (req, res) => {
-  console.log("SP")
   const corporationId = Number(req.params.corporationId);
   if (isNaN(corporationId)) return res.status(400).send("400 Bad Request");
 
