@@ -1,9 +1,9 @@
-import express from "express";
+import express, { Request, Response }  from "express";
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
-import {  corporations, schedules } from "../db/schema";
+import { corporations, schedules } from '../db/schema';
 import { eq } from "drizzle-orm";
-import { query } from "express-validator";
+import { oneOf, query } from "express-validator";
 
 const app = express();
 app.use(express.json());
@@ -16,15 +16,21 @@ const client = postgres(connectionString);
 const db = drizzle(client);
 
 //  企業一覧を取得する with latest schedule
-app.get("/corporations", query("userId").isUUID(), async (req, res) => {
+type CoporationsQueryT = {
+  limit: number;
+  offset: number;
+  userId: string;
+}
+
+app.get("/corporations", query("userId").isUUID(), async (req:Request<{}, {}, {}, CoporationsQueryT>, res:Response) => {
   if (!req.query) {
     const allCorps = await db.select().from(corporations);
     return res.json(allCorps);
   }
 
-  const userId = String(req.query.userId);
-  const limit = Number(req.query.limit) || 10;
-  const offset = Number(req.query.offset) || 0;
+  const userId = req.query.userId;
+  const limit = req.query.limit || 10;
+  const offset = req.query.offset || 0;
 
   const latestScheduleSubQuery = db
     .select()
@@ -46,12 +52,14 @@ app.get("/corporations", query("userId").isUUID(), async (req, res) => {
 });
 
 // 企業を追加する
-app.post("/corporations", async (req, res) => {
-  console.log("post");
-  // insert data into database
-  console.log(req.body);
-  const name = String(req.body.name);
-  const userId = String(req.body.userId);
+type CoporationsBodyT = {
+  name:string;
+  userId:string;
+}
+
+app.post("/corporations", async (req:Request<{}, {}, CoporationsBodyT>, res:Response) => {
+  const name = req.body.name;
+  const userId = req.body.userId;
   const insertedRecord = await db
     .insert(corporations)
     .values({ name: name, userId: userId });
