@@ -14,7 +14,7 @@ app.use(cors());
 const port = Bun.env.port || 8087;
 
 app.use("/corporations", corporationsRoute());
-app.use("/schedule", schedulesRoute());
+app.use("/schedules", schedulesRoute());
 app.use("/notifications", notificationsRoute());
 
 app.listen(port, () => {
