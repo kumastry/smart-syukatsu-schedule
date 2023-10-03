@@ -4,10 +4,12 @@ import postgres from "postgres";
 import { corporations, schedules } from "../db/schema";
 import { eq } from "drizzle-orm";
 import { oneOf, query } from "express-validator";
+import cors from "cors";
 
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cors());
 
 const port = 8087;
 
