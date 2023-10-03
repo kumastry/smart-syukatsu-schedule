@@ -1,22 +1,74 @@
 import express, { Request, Response } from "express";
-import { drizzle } from "drizzle-orm/postgres-js";
-import postgres from "postgres";
-import { corporations, schedules } from "./../../db/schema";
 import { eq } from "drizzle-orm";
-import { oneOf, query } from "express-validator";
 import { notifications } from "../../db/schema";
+import db from "./../../db/db";
 
 const router = express.Router();
-const connectionString = Bun.env.DATABASE_URL as string;
-const client = postgres(connectionString);
-const db = drizzle(client);
+
+type QueryT = {
+  limit?: number;
+  offset?: number;
+};
+
+type notificationParamT = {
+  notificationId: number;
+};
 
 const notificationsRoute = () => {
-  router.get("/notifications/:notificationId", async (req, res) => {});
+  router.get("/", async (req: Request<{}, {}, {}, QueryT>, res: Response) => {
+    const limit = req.query.limit || 50;
+    const offset = req.query.offset || 0;
+    if (isNaN(limit) || isNaN(offset)) return res.sendStatus(400);
 
-  router.patch("/notifications/:notificationId", async (req, res) => {});
+    const notis = await db
+      .select()
+      .from(notifications)
+      .limit(limit)
+      .offset(offset);
 
-  router.delete("/notifications/:notificationId", async (req, res) => {});
+    return res.status(200).json(notis);
+  });
+
+  router.get(
+    "/:notificationId",
+    async (req: Request<notificationParamT>, res: Response) => {
+      const notificationId = req.params.notificationId;
+      if (isNaN(notificationId)) return res.sendStatus(400);
+
+      const noti = await db
+        .select()
+        .from(notifications)
+        .where(eq(notifications.id, notificationId));
+      if (!noti.length) return res.sendStatus(404);
+
+      return res.status(200).json(noti[0]);
+    },
+  );
+
+  router.patch(
+    "/:notificationId",
+    async (req: Request<notificationParamT>, res: Response) => {
+    // do after
+    //   const notificationId = req.params.notificationId;
+    //   if (isNaN(notificationId)) return res.sendStatus(400);
+    },
+  );
+
+  router.delete(
+    "/:notificationId",
+    async (req: Request<notificationParamT>, res: Response) => {
+      const notificationId = req.params.notificationId;
+      if (isNaN(notificationId)) return res.sendStatus(400);
+
+      const deletedNoti = await db
+        .delete(notifications)
+        .where(eq(notifications.id, notificationId))
+        .returning();
+
+      if (!deletedNoti.length) return res.sendStatus(404);
+      return res.send(200).json(deletedNoti[0]);
+    },
+  );
   return router;
 };
 
