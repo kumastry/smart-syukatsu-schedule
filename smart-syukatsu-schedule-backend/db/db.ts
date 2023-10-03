@@ -1,8 +1,8 @@
-import { drizzle, PostgresJsDatabase } from 'drizzle-orm/postgres-js';
-import { migrate } from 'drizzle-orm/postgres-js/migrator';
-import postgres from 'postgres';
+import { drizzle} from "drizzle-orm/postgres-js";
+import postgres from "postgres";
 
-const connectionString = Bun.env.DATABASE_URL;
-const migrationClient = postgres(connectionString, {max:1});
-console.log("await migration....")
-await migrate(drizzle(migrationClient), { migrationsFolder: './drizzle' });
+const connectionString = Bun.env.DATABASE_URL as string;
+const client = postgres(connectionString);
+const db = drizzle(client);
+
+export default db;
