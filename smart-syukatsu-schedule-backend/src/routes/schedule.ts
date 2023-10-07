@@ -10,9 +10,9 @@ type scheduleParamT = {
 };
 
 type QueryT = {
-    limit? : number;
-    offset? : number;
-}
+  limit?: number;
+  offset?: number;
+};
 
 type notificationBodyT = {
   notificationTime: Date;
@@ -22,9 +22,9 @@ const schedulesRoute = () => {
   router.get("/", async (req: Request<{}, {}, {}, QueryT>, res: Response) => {
     const limit = req.query.limit || 50;
     const offset = req.query.offset || 0;
-    if(isNaN(limit) || isNaN(offset)) return res.sendStatus(403);
+    if (isNaN(limit) || isNaN(offset)) return res.sendStatus(403);
     const schs = await db.select().from(schedules).limit(limit).offset(offset);
-    if(!schs.length) return res.sendStatus(404);
+    if (!schs.length) return res.sendStatus(404);
     return res.status(200).json(schs);
   });
 

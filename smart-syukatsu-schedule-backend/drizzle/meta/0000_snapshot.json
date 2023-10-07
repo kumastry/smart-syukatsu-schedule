@@ -33,12 +33,8 @@
           "name": "corporations_user_id_users_id_fk",
           "tableFrom": "corporations",
           "tableTo": "users",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -75,12 +71,8 @@
           "name": "notifications_schedule_id_schedules_id_fk",
           "tableFrom": "notifications",
           "tableTo": "schedules",
-          "columnsFrom": [
-            "schedule_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["schedule_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -141,12 +133,8 @@
           "name": "schedules_corporation_id_corporations_id_fk",
           "tableFrom": "schedules",
           "tableTo": "corporations",
-          "columnsFrom": [
-            "corporation_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["corporation_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -185,9 +173,7 @@
         "users_email_unique": {
           "name": "users_email_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "email"
-          ]
+          "columns": ["email"]
         }
       }
     }

@@ -5,8 +5,6 @@ import postgres from "postgres";
 const connectionString = Bun.env.DATABASE_URL as string;
 const migrationClient = postgres(connectionString, { max: 1 });
 console.log("await migration....");
-( async() =>
-    {
-        await migrate(drizzle(migrationClient), { migrationsFolder: "./../drizzle" })
-    }
-)();
+(async () => {
+  await migrate(drizzle(migrationClient), { migrationsFolder: "./../drizzle" });
+})();
