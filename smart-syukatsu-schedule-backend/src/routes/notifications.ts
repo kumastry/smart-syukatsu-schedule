@@ -16,17 +16,23 @@ type notificationParamT = {
 
 const notificationsRoute = () => {
   router.get("/", async (req: Request<{}, {}, {}, QueryT>, res: Response) => {
-    const limit = req.query.limit || 50;
-    const offset = req.query.offset || 0;
-    if (isNaN(limit) || isNaN(offset)) return res.sendStatus(400);
+    try {
+      const limit = req.query.limit || 50;
+      const offset = req.query.offset || 0;
+      if (isNaN(limit) || isNaN(offset)) return res.sendStatus(400);
+      const notis = await db
+        .select()
+        .from(notifications)
+        .limit(limit)
+        .offset(offset);
 
-    const notis = await db
-      .select()
-      .from(notifications)
-      .limit(limit)
-      .offset(offset);
-
-    return res.status(200).json(notis);
+      return res.status(200).json(notis);
+    } catch (error: unknown) {
+      res.sendStatus(500);
+      if (error instanceof Error) {
+        console.error(error.message);
+      }
+    }
   });
 
   router.get(
@@ -48,9 +54,9 @@ const notificationsRoute = () => {
   router.patch(
     "/:notificationId",
     async (req: Request<notificationParamT>, res: Response) => {
-    // do after
-    //   const notificationId = req.params.notificationId;
-    //   if (isNaN(notificationId)) return res.sendStatus(400);
+      // do after
+      //   const notificationId = req.params.notificationId;
+      //   if (isNaN(notificationId)) return res.sendStatus(400);
     },
   );
 

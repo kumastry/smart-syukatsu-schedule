@@ -3,7 +3,7 @@ import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import { corporations, schedules } from "./../../db/schema";
 import { eq } from "drizzle-orm";
-import { oneOf, query } from "express-validator";
+import { query } from "express-validator";
 
 const router = express.Router();
 const connectionString = Bun.env.DATABASE_URL as string;
@@ -17,10 +17,29 @@ const corporationsRoute = () => {
     userId: string;
   };
 
+  type PostScheduleBody = {
+    name?:
+      | "interview"
+      | "casual_interview"
+      | "ES"
+      | "coding_test"
+      | "Information_session"
+      | "aptitude_test"
+      | "document_screening";
+    event: string;
+    note: string;
+  };
+
+  type CoporationsBodyT = {
+    name: string;
+    userId: string;
+  };
+
   router.get(
     "/",
     query("userId").isUUID(),
     async (req: Request<{}, {}, {}, CoporationsQueryT>, res: Response) => {
+      try {
       if (!req.query) {
         const allCorps = await db.select().from(corporations);
         return res.json(allCorps);
@@ -47,15 +66,16 @@ const corporationsRoute = () => {
         .limit(limit)
         .offset(limit * offset);
       return res.status(200).json(corps);
+      } catch (error:unknown) {
+        res.sendStatus(500);
+        if(error instanceof Error) {
+          console.error(error.message);
+        }
+      }
     },
   );
 
   // 企業を追加する
-  type CoporationsBodyT = {
-    name: string;
-    userId: string;
-  };
-
   router.post(
     "/",
     async (req: Request<{}, {}, CoporationsBodyT>, res: Response) => {
@@ -121,18 +141,7 @@ const corporationsRoute = () => {
     res.status(200).json(schs);
   });
 
-  type PostScheduleBody = {
-    name?:
-      | "interview"
-      | "casual_interview"
-      | "ES"
-      | "coding_test"
-      | "Information_session"
-      | "aptitude_test"
-      | "document_screening";
-    event: string;
-    note: string;
-  };
+
 
   router.post("/:corporationId/schedules", async (req, res) => {
     const corporationId = Number(req.params.corporationId);
